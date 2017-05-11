@@ -43,3 +43,38 @@ with open('articleInfo.csv', 'w') as f:
         f.write(",".join(tmp) + "\n")
 
 
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+
+output = []
+output.append(["url1","index1","url2","index2"])
+allLinks = set()
+allLinks.add(url)
+
+for initLink in initLinks:   
+    if initLink.has_attr('href'):
+        allLinks.add(initLink)
+        index1 = list(allLinks).index(initLink)
+        try:        
+            data = doIt(initLink["href"])
+            soup = BeautifulSoup(data, "html5lib")
+            links = soup.find_all('a')
+            for link in links:
+                if link.has_attr('href'):
+                    allLinks.add(link)
+                    index2 = list(allLinks).index(link)
+                    output.append([initLink["href"],index1,link["href"],index2])
+                    # print("count2 " + str(count2))
+        except:
+            pass
+
+
+
+with open('articleConnections.csv', 'w') as f:
+    for line in output:
+        f.write( str(line[1]) + "," + str(line[3]) + "\n")
+
+
+
